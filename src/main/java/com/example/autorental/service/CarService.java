@@ -5,7 +5,6 @@ import com.example.autorental.dto.CarDTO;
 import com.example.autorental.mapper.CarMapper;
 import com.example.autorental.model.Car;
 import com.example.autorental.repository.CarRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,11 +14,14 @@ import java.util.stream.Collectors;
 @Service
 public class CarService {
 
-    @Autowired
-    private CarRepository carRepository;
+    private final CarRepository carRepository;
 
-    @Autowired
-    private CarMapper carMapper; // Mapper nesnesi
+    private final CarMapper carMapper;
+
+    public CarService(CarRepository carRepository, CarMapper carMapper) {
+        this.carRepository = carRepository;
+        this.carMapper = carMapper;
+    }
 
     public List<CarDTO> getAllCars() {
         return carRepository.findAll().stream()
