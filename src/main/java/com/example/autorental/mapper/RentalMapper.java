@@ -1,7 +1,9 @@
 package com.example.autorental.mapper;
 
 import com.example.autorental.dto.RentalDTO;
+import com.example.autorental.model.Car;
 import com.example.autorental.model.Rental;
+import com.example.autorental.model.User;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -16,12 +18,16 @@ public class RentalMapper {
         return dto;
     }
 
-    public Rental toEntity(RentalDTO dto) {
+    public Rental toEntity(RentalDTO dto, User user, Car car) {
         Rental rental = new Rental();
         rental.setId(dto.getId());
-        // Kullanıcı ve araç nesneleri için eklemeler yapmalısınız
+
+        rental.setUser(user);
+        rental.setCar(car);
+
         rental.setStartDate(dto.getStartDate());
         rental.setEndDate(dto.getEndDate());
+
         return rental;
     }
 }
