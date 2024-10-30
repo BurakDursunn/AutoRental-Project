@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 public class CarService {
 
     private final CarRepository carRepository;
-
     private final CarMapper carMapper;
 
     public CarService(CarRepository carRepository, CarMapper carMapper) {
