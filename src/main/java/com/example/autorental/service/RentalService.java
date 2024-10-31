@@ -45,18 +45,15 @@ public class RentalService {
     }
 
     public RentalDTO createRental(RentalDTO rentalDTO) {
-        // Kullanıcıyı getir veya yoksa hata fırlat
+
         User user = userRepository.findById(rentalDTO.getUserId())
                 .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + rentalDTO.getUserId()));
 
-        // Aracı getir veya yoksa hata fırlat
         Car car = carRepository.findById(rentalDTO.getCarId())
                 .orElseThrow(() -> new CarNotFoundException("Car not found with ID: " + rentalDTO.getCarId()));
 
-        // Rental DTO'yu Rental entity'ye dönüştürürken User ve Car'ı dahil et
         Rental rental = rentalMapper.toEntity(rentalDTO, user, car);
 
-        // Rental kaydını kaydet ve DTO olarak geri döndür
         Rental savedRental = rentalRepository.save(rental);
         return rentalMapper.toDTO(savedRental);
     }

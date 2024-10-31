@@ -28,10 +28,10 @@ public class CarController {
 
     @GetMapping("/{id}")
     public ResponseEntity<CarDTO> getCarById(@PathVariable Long id) {
-        return carService.getCarById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        CarDTO carDTO = carService.getCarById(id);
+        return carDTO != null ? ResponseEntity.ok(carDTO) : ResponseEntity.notFound().build();
     }
+
 
     @PostMapping
     public ResponseEntity<CarDTO> createCar(@Valid @RequestBody CarDTO carDTO) {

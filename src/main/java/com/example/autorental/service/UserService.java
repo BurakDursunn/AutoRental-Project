@@ -41,6 +41,7 @@ public class UserService {
         return userMapper.toDTO(userRepository.save(user));
     }
 
+
     public UserDTO updateUser(Long id, UserDTO userDTO) {
         User user = userMapper.toEntity(userDTO);
         user.setId(id);

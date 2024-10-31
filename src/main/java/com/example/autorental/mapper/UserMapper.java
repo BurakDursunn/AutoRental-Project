@@ -6,19 +6,21 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class UserMapper {
-    public UserDTO toDTO(User user) {
-        UserDTO dto = new UserDTO();
-        dto.setId(user.getId());
-        dto.setUsername(user.getUsername());
-        dto.setEmail(user.getEmail());
-        return dto;
+    public User toEntity(UserDTO userDTO) {
+        User user = new User();
+        user.setId(userDTO.getId());
+        user.setUsername(userDTO.getUsername());
+        user.setEmail(userDTO.getEmail());
+        user.setPassword(userDTO.getPassword());  // Burada password'un da ayarlandığından emin olun
+        return user;
     }
 
-    public User toEntity(UserDTO dto) {
-        User user = new User();
-        user.setId(dto.getId());
-        user.setUsername(dto.getUsername());
-        user.setEmail(dto.getEmail());
-        return user;
+    public UserDTO toDTO(User user) {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(user.getId());
+        userDTO.setUsername(user.getUsername());
+        userDTO.setEmail(user.getEmail());
+        userDTO.setPassword(user.getPassword());  // Eğer DTO'ya password eklemek istiyorsanız
+        return userDTO;
     }
 }
