@@ -2,6 +2,7 @@ package com.example.autorental.service;
 
 
 import com.example.autorental.dto.CarDTO;
+import com.example.autorental.exception.CarNotFoundException;
 import com.example.autorental.mapper.CarMapper;
 import com.example.autorental.model.Car;
 import com.example.autorental.repository.CarRepository;
@@ -28,9 +29,12 @@ public class CarService {
                 .collect(Collectors.toList());
     }
 
-    public Optional<CarDTO> getCarById(Long id) {
-        return carRepository.findById(id).map(carMapper::toDTO);
+    public CarDTO getCarById(Long id) {
+        return carRepository.findById(id)
+                .map(carMapper::toDTO)
+                .orElseThrow(() -> new CarNotFoundException("Car not found with ID: " + id));
     }
+
 
     public CarDTO createCar(CarDTO carDTO) {
         Car car = carMapper.toEntity(carDTO);

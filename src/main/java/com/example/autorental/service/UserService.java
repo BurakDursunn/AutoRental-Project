@@ -1,6 +1,7 @@
 package com.example.autorental.service;
 
 import com.example.autorental.dto.UserDTO;
+import com.example.autorental.exception.UserNotFoundException;
 import com.example.autorental.mapper.UserMapper;
 import com.example.autorental.model.User;
 import com.example.autorental.repository.UserRepository;
@@ -28,9 +29,12 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public Optional<UserDTO> getUserById(Long id) {
-        return userRepository.findById(id).map(userMapper::toDTO);
+    public UserDTO getUserById(Long id) {
+        return userRepository.findById(id)
+                .map(userMapper::toDTO)
+                .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + id));
     }
+
 
     public UserDTO createUser(UserDTO userDTO) {
         User user = userMapper.toEntity(userDTO);

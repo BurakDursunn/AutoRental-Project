@@ -1,7 +1,9 @@
 package com.example.autorental.service;
 
 import com.example.autorental.dto.RentalDTO;
+import com.example.autorental.exception.CarNotFoundException;
 import com.example.autorental.exception.ResourceNotFoundException;
+import com.example.autorental.exception.UserNotFoundException;
 import com.example.autorental.mapper.RentalMapper;
 import com.example.autorental.model.Rental;
 import com.example.autorental.model.User;
@@ -43,31 +45,36 @@ public class RentalService {
     }
 
     public RentalDTO createRental(RentalDTO rentalDTO) {
-        // Kullanıcı ve araç nesnelerini bul
+        // Kullanıcıyı getir veya yoksa hata fırlat
         User user = userRepository.findById(rentalDTO.getUserId())
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + rentalDTO.getUserId()));
-        Car car = carRepository.findById(rentalDTO.getCarId())
-                .orElseThrow(() -> new ResourceNotFoundException("Car not found with ID: " + rentalDTO.getCarId()));
+                .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + rentalDTO.getUserId()));
 
-        // Rental nesnesini DTO'dan oluştur
+        // Aracı getir veya yoksa hata fırlat
+        Car car = carRepository.findById(rentalDTO.getCarId())
+                .orElseThrow(() -> new CarNotFoundException("Car not found with ID: " + rentalDTO.getCarId()));
+
+        // Rental DTO'yu Rental entity'ye dönüştürürken User ve Car'ı dahil et
         Rental rental = rentalMapper.toEntity(rentalDTO, user, car);
 
-        return rentalMapper.toDTO(rentalRepository.save(rental));
+        // Rental kaydını kaydet ve DTO olarak geri döndür
+        Rental savedRental = rentalRepository.save(rental);
+        return rentalMapper.toDTO(savedRental);
     }
+
 
     public RentalDTO updateRental(Long id, RentalDTO rentalDTO) {
         Rental existingRental = rentalRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Rental not found with ID: " + id));
 
-        // Kullanıcı ve araç nesnelerini bul
+
         User user = userRepository.findById(rentalDTO.getUserId())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + rentalDTO.getUserId()));
         Car car = carRepository.findById(rentalDTO.getCarId())
                 .orElseThrow(() -> new ResourceNotFoundException("Car not found with ID: " + rentalDTO.getCarId()));
 
-        // DTO'dan var olan kiralamayı güncelle
+
         Rental updatedRental = rentalMapper.toEntity(rentalDTO, user, car);
-        updatedRental.setId(existingRental.getId()); // ID'yi koru
+        updatedRental.setId(existingRental.getId());
 
         return rentalMapper.toDTO(rentalRepository.save(updatedRental));
     }

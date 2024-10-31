@@ -11,9 +11,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/rentals")
 public class RentalController {
+
     private final RentalService rentalService;
 
-    @Autowired
     public RentalController(RentalService rentalService) {
         this.rentalService = rentalService;
     }
